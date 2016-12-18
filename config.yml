@@ -1,0 +1,118 @@
+# Your project's server will run on localhost:xxxx at this port
+PORT: 8000
+
+# Autoprefixer will make sure your CSS works with these browsers
+COMPATIBILITY:
+  ## Foundation
+  # - "last 2 versions"
+  # - "ie >= 9"
+  # - "ios >= 7"
+  ## Boostrap 3
+  - "Android 2.3"
+  - "Android >= 4"
+  - "Chrome >= 20"
+  - "Firefox >= 24"
+  - "Explorer >= 8"
+  - "iOS >= 6"
+  - "Opera >= 12"
+  - "Safari >= 6"
+
+# UnCSS will use these settings
+UNCSS_OPTIONS:
+  html:
+    - "src/**/*.html"
+  ignore:
+    ## Foundation
+    # - !!js/regexp .foundation-mq
+    # - !!js/regexp ^\.is-.*
+    ##   motion UI
+    # - !!js/regexp ^\.(fade|slide|hinge|scale|spin)
+    ##- !!js/regexp ^\.mui-.*
+    ## Bootstrap3
+    - /\w\.in/
+    - '.fade'
+    - '.collapse'
+    - '.collapsing'
+    - /(#|\.)navbar(\-[a-zA-Z]+)?/
+    - /(#|\.)dropdown(\-[a-zA-Z]+)?/
+    - /(#|\.)(open)/,
+    - /(#|\.)carousel(\-[a-zA-Z]+)?/
+    - '.modal'
+    - '.modal.fade.in'
+    - '.modal-dialog'
+    - '.modal-document'
+    - '.modal-scrollbar-measure'
+    - '.modal-backdrop.fade'
+    - '.modal-backdrop.in'
+    - '.modal.fade.modal-dialog'
+    - '.modal.in.modal-dialog'
+    - '.modal-open'
+    - '.in'
+    - '.modal-backdrop'
+    - /\.affix/
+    - /\.alert/
+    - /\.close/
+    - /\.has/
+    - /\.help/,
+    - /\.popover/
+    - /\.tooltip/
+
+# Gulp will reference these paths when it copies files
+PATHS:
+  # Path to dist folder
+  dist: "dist"  
+  # Paths to static assets that aren't images, CSS, or JavaScript
+  assets:
+    - "src/assets/**/*"
+    - "!src/assets/{img,js,scss}"
+    - "!src/assets/{img,js,scss}/**/*"
+  # Содержимое папки попадает в корень билда
+  to_root:
+    - "src/to-root/**/*"
+  #Sprites
+  sprites:
+  - "src/assets/img/sprites/"
+  # Paths to Sass libraries, which can then be loaded with @import
+  sass:
+    #- "bower_components/foundation-sites/scss"
+    #- "bower_components/motion-ui/src"
+     - "bower_components/bootstrap-sass/assets/stylesheets"
+  # Paths to JavaScript libraries, which are combined into one file
+  javascript:
+    # Libraries required by Foundation и не только
+    - "bower_components/jquery/dist/jquery.js"
+
+    #Foundation был тут
+    # - "bower_components/what-input/dist/what-input.js"
+    # # Core Foundation files
+    # - "bower_components/foundation-sites/js/foundation.core.js"
+    # - "bower_components/foundation-sites/js/foundation.util.*.js"
+    # # Individual Foundation components
+    # # If you aren't using a component, just remove it from the list
+    # - "bower_components/foundation-sites/js/foundation.abide.js"
+    # - "bower_components/foundation-sites/js/foundation.accordion.js"
+    # - "bower_components/foundation-sites/js/foundation.accordionMenu.js"
+    # - "bower_components/foundation-sites/js/foundation.drilldown.js"
+    # - "bower_components/foundation-sites/js/foundation.dropdown.js"
+    # - "bower_components/foundation-sites/js/foundation.dropdownMenu.js"
+    # - "bower_components/foundation-sites/js/foundation.equalizer.js"
+    # - "bower_components/foundation-sites/js/foundation.interchange.js"
+    # - "bower_components/foundation-sites/js/foundation.magellan.js"
+    # - "bower_components/foundation-sites/js/foundation.offcanvas.js"
+    # - "bower_components/foundation-sites/js/foundation.orbit.js"
+    # - "bower_components/foundation-sites/js/foundation.responsiveMenu.js"
+    # - "bower_components/foundation-sites/js/foundation.responsiveToggle.js"
+    # - "bower_components/foundation-sites/js/foundation.reveal.js"
+    # - "bower_components/foundation-sites/js/foundation.slider.js"
+    # - "bower_components/foundation-sites/js/foundation.sticky.js"
+    # - "bower_components/foundation-sites/js/foundation.tabs.js"
+    # - "bower_components/foundation-sites/js/foundation.toggler.js"
+    # - "bower_components/foundation-sites/js/foundation.tooltip.js"
+    # - "bower_components/foundation-sites/js/foundation.zf.responsiveAccordionTabs.js"
+
+    # Bootstrap 3
+    - "bower_components/bootstrap-sass/assets/javascripts/bootstrap.js"
+    # Paths to your own project code are here
+    
+    - "src/assets/js/!(app).js"
+    - "src/assets/js/app.js"
