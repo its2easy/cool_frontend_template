@@ -1,6 +1,6 @@
 # Cool frontend template
 
-My template based on ZURB Template for sites
+My template based on ZURB Template for sites  
 Gulp config provides these features:
 
 - CSS: SCSS, UnCss, Autoprefixer, CSSNano, Sourcemap
@@ -10,7 +10,7 @@ Gulp config provides these features:
 - Sprites: gulp.spritesmith
 - Server: live-reload via browser-sync
 
-Load settings from config.yml
+Load settings from config.yml  
 There is a possibility to switch between Bootstrap3 and Foundation6 by commenting and uncommenting settings
 
 ## Install 
