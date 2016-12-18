@@ -28,7 +28,7 @@ npm start
 ```
 For production:
 ```bash
-npm build run
+npm run build
 ```
 Your finished site will be created in a folder called `dist`, viewable at this URL:
 
