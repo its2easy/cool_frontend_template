@@ -5,12 +5,11 @@ import yargs    from 'yargs';
 import browser  from 'browser-sync';
 import gulp     from 'gulp';
 import panini   from 'panini';
-import rimraf   from 'rimraf';
-import sherpa   from 'style-sherpa';
 import yaml     from 'js-yaml';
 import fs       from 'fs';
 
 var spritesmith = require('gulp.spritesmith');
+var del = require('del');
 
 
 // Load all Gulp plugins into one variable
@@ -39,7 +38,10 @@ gulp.task('default',
 // Delete the "dist" folder
 // This happens every time a build starts
 function clean(done) {
-  rimraf(PATHS.dist, done);
+  del(PATHS.delete_dist_options)
+    .then(function(){
+      done();
+  })
 }
 
 // Copy files out of the assets folder

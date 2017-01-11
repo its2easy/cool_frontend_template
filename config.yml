@@ -29,14 +29,14 @@ UNCSS_OPTIONS:
     # - !!js/regexp ^\.(fade|slide|hinge|scale|spin)
     ##- !!js/regexp ^\.mui-.*
     ## Bootstrap3
-    - /\w\.in/
+    - !!js/regexp \w\.in
     - '.fade'
     - '.collapse'
     - '.collapsing'
-    - /(#|\.)navbar(\-[a-zA-Z]+)?/
-    - /(#|\.)dropdown(\-[a-zA-Z]+)?/
-    - /(#|\.)(open)/,
-    - /(#|\.)carousel(\-[a-zA-Z]+)?/
+    - !!js/regexp (#|\.)navbar(\-[a-zA-Z]+)?
+    - !!js/regexp (#|\.)dropdown(\-[a-zA-Z]+)?
+    - !!js/regexp (#|\.)(open)
+    - !!js/regexp (#|\.)carousel(\-[a-zA-Z]+)?
     - '.modal'
     - '.modal.fade.in'
     - '.modal-dialog'
@@ -49,18 +49,30 @@ UNCSS_OPTIONS:
     - '.modal-open'
     - '.in'
     - '.modal-backdrop'
-    - /\.affix/
-    - /\.alert/
-    - /\.close/
-    - /\.has/
-    - /\.help/,
-    - /\.popover/
-    - /\.tooltip/
+    - !!js/regexp \.affix
+    - !!js/regexp \.alert
+    - !!js/regexp \.close
+    - !!js/regexp \.has
+    - !!js/regexp \.help
+    - !!js/regexp \.popover
+    - !!js/regexp \.tooltip
+    - !!js/regexp \.in
+    - !!js/regexp \.slick
+    #Custom
+    #- '.overflow-toggle'
+    #- !!js/regexp \.lg
 
 # Gulp will reference these paths when it copies files
 PATHS:
   # Path to dist folder
   dist: "dist"  
+  # очистка dist не трогая файлов для heroku
+  delete_dist_options:
+    - "dist/**/*"
+    - "!dist/composer.json"
+    - "!dist/index.php"
+    - "!dist/.git"
+    - "!dist/.git/**/*"
   # Paths to static assets that aren't images, CSS, or JavaScript
   assets:
     - "src/assets/**/*"
