@@ -17,6 +17,7 @@
   "dependencies": {
     "foundation-sites": "~6.3.0",
     "motion-ui": "~1.2.2",
-    "bootstrap-sass": "^3.3.7"
+    "bootstrap-sass": "^3.3.7",
+    "bootstrap": "v4.0.0-alpha.6"
   }
 }

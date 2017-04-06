@@ -3,70 +3,82 @@ PORT: 8000
 
 # Autoprefixer will make sure your CSS works with these browsers
 COMPATIBILITY:
-  ## Foundation
-  # - "last 2 versions"
-  # - "ie >= 9"
-  # - "ios >= 7"
-  ## Boostrap 3
+#  # Foundation
+#   - "last 2 versions"
+#   - "ie >= 9"
+#   - "ios >= 7"
+#  # Boostrap 3
+#   - "Android 2.3"
+#   - "Android >= 4"
+#   - "Chrome >= 20"
+#   - "Firefox >= 24"
+#   - "Explorer >= 8"
+#   - "iOS >= 6"
+#   - "Opera >= 12"
+#   - "Safari >= 6"
+   #Boostrap 4
   - "Android 2.3"
   - "Android >= 4"
-  - "Chrome >= 20"
-  - "Firefox >= 24"
-  - "Explorer >= 8"
-  - "iOS >= 6"
+  - "Chrome >= 26"
+  - "Firefox >= 38"
+  - "Edge >= 12"
+  - "Explorer >= 10"
+  - "iOS >= 8"
   - "Opera >= 12"
-  - "Safari >= 6"
+  - "Safari >= 8"
 
-# UnCSS will use these settings
+# UnCSS will use these settings (Uncss can damage animations effects!)
 UNCSS_OPTIONS:
   html:
     - "src/**/*.html"
   ignore:
-    ## Foundation
-    # - !!js/regexp .foundation-mq
-    # - !!js/regexp ^\.is-.*
-    ##   motion UI
-    # - !!js/regexp ^\.(fade|slide|hinge|scale|spin)
-    ##- !!js/regexp ^\.mui-.*
+    # Foundation
+#     - !!js/regexp .foundation-mq
+#     - !!js/regexp ^\.is-.*
+#    #   motion UI
+#     - !!js/regexp ^\.(fade|slide|hinge|scale|spin)
+#     - !!js/regexp ^\.mui-.*
     ## Bootstrap3
-    - !!js/regexp \w\.in
-    - '.fade'
-    - '.collapse'
-    - '.collapsing'
-    - !!js/regexp (#|\.)navbar(\-[a-zA-Z]+)?
-    - !!js/regexp (#|\.)dropdown(\-[a-zA-Z]+)?
-    - !!js/regexp (#|\.)(open)
-    - !!js/regexp (#|\.)carousel(\-[a-zA-Z]+)?
-    - '.modal'
-    - '.modal.fade.in'
-    - '.modal-dialog'
-    - '.modal-document'
-    - '.modal-scrollbar-measure'
-    - '.modal-backdrop.fade'
-    - '.modal-backdrop.in'
-    - '.modal.fade.modal-dialog'
-    - '.modal.in.modal-dialog'
-    - '.modal-open'
-    - '.in'
-    - '.modal-backdrop'
-    - !!js/regexp \.affix
-    - !!js/regexp \.alert
-    - !!js/regexp \.close
-    - !!js/regexp \.has
-    - !!js/regexp \.help
-    - !!js/regexp \.popover
-    - !!js/regexp \.tooltip
-    - !!js/regexp \.in
-    - !!js/regexp \.slick
-    #Custom
-    #- '.overflow-toggle'
-    #- !!js/regexp \.lg
+#    - !!js/regexp \w\.in
+#    - '.fade'
+#    - '.collapse'
+#    - '.collapsing'
+#    - !!js/regexp (#|\.)navbar(\-[a-zA-Z]+)?
+#    - !!js/regexp (#|\.)dropdown(\-[a-zA-Z]+)?
+#    - !!js/regexp (#|\.)(open)
+#    - !!js/regexp (#|\.)carousel(\-[a-zA-Z]+)?
+#    - '.modal'
+#    - '.modal.fade.in'
+#    - '.modal-dialog'
+#    - '.modal-document'
+#    - '.modal-scrollbar-measure'
+#    - '.modal-backdrop.fade'
+#    - '.modal-backdrop.in'
+#    - '.modal.fade.modal-dialog'
+#    - '.modal.in.modal-dialog'
+#    - '.modal-open'
+#    - '.in'
+#    - '.modal-backdrop'
+#    - !!js/regexp \.affix
+#    - !!js/regexp \.alert
+#    - !!js/regexp \.close
+#    - !!js/regexp \.has
+#    - !!js/regexp \.help
+#    - !!js/regexp \.popover
+#    - !!js/regexp \.tooltip
+#    - !!js/regexp \.in
+#    - !!js/regexp \.slick
+#    #Custom
+#    - '.overflow-toggle'
+#    - !!js/regexp \.lg
+#    #Bootstrap4
+#    #todo Google it!
 
 # Gulp will reference these paths when it copies files
 PATHS:
   # Path to dist folder
   dist: "dist"  
-  # очистка dist не трогая файлов для heroku
+  # clear dist folder not touching heroku files
   delete_dist_options:
     - "dist/**/*"
     - "!dist/composer.json"
@@ -78,7 +90,7 @@ PATHS:
     - "src/assets/**/*"
     - "!src/assets/{img,js,scss}"
     - "!src/assets/{img,js,scss}/**/*"
-  # Содержимое папки попадает в корень билда
+  # Content here will be copied to the root
   to_root:
     - "src/to-root/**/*"
   #Sprites
@@ -86,45 +98,53 @@ PATHS:
   - "src/assets/img/sprites/"
   # Paths to Sass libraries, which can then be loaded with @import
   sass:
-    #- "bower_components/foundation-sites/scss"
-    #- "bower_components/motion-ui/src"
-     - "bower_components/bootstrap-sass/assets/stylesheets"
+#  #FOUNDATION scss
+#    - "bower_components/foundation-sites/scss"
+#    - "bower_components/motion-ui/src"
+#   #BOOTSTRAP3 scss
+#    - "bower_components/bootstrap-sass/assets/stylesheets"
+   #BOOTSTRAP4 scss
+     - "bower_components/bootstrap/scss"
   # Paths to JavaScript libraries, which are combined into one file
   javascript:
-    # Libraries required by Foundation и не только
+    # Common libraries
     - "bower_components/jquery/dist/jquery.js"
 
-    #Foundation был тут
-    # - "bower_components/what-input/dist/what-input.js"
-    # # Core Foundation files
-    # - "bower_components/foundation-sites/js/foundation.core.js"
-    # - "bower_components/foundation-sites/js/foundation.util.*.js"
-    # # Individual Foundation components
-    # # If you aren't using a component, just remove it from the list
-    # - "bower_components/foundation-sites/js/foundation.abide.js"
-    # - "bower_components/foundation-sites/js/foundation.accordion.js"
-    # - "bower_components/foundation-sites/js/foundation.accordionMenu.js"
-    # - "bower_components/foundation-sites/js/foundation.drilldown.js"
-    # - "bower_components/foundation-sites/js/foundation.dropdown.js"
-    # - "bower_components/foundation-sites/js/foundation.dropdownMenu.js"
-    # - "bower_components/foundation-sites/js/foundation.equalizer.js"
-    # - "bower_components/foundation-sites/js/foundation.interchange.js"
-    # - "bower_components/foundation-sites/js/foundation.magellan.js"
-    # - "bower_components/foundation-sites/js/foundation.offcanvas.js"
-    # - "bower_components/foundation-sites/js/foundation.orbit.js"
-    # - "bower_components/foundation-sites/js/foundation.responsiveMenu.js"
-    # - "bower_components/foundation-sites/js/foundation.responsiveToggle.js"
-    # - "bower_components/foundation-sites/js/foundation.reveal.js"
-    # - "bower_components/foundation-sites/js/foundation.slider.js"
-    # - "bower_components/foundation-sites/js/foundation.sticky.js"
-    # - "bower_components/foundation-sites/js/foundation.tabs.js"
-    # - "bower_components/foundation-sites/js/foundation.toggler.js"
-    # - "bower_components/foundation-sites/js/foundation.tooltip.js"
-    # - "bower_components/foundation-sites/js/foundation.zf.responsiveAccordionTabs.js"
+#    #FOUNDATION6 js parts
+#    - "bower_components/what-input/dist/what-input.js"
+#    # Core Foundation files
+#    - "bower_components/foundation-sites/js/foundation.core.js"
+#    - "bower_components/foundation-sites/js/foundation.util.*.js"
+#    # Individual Foundation components
+#    # If you aren't using a component, just remove it from the list
+#    - "bower_components/foundation-sites/js/foundation.abide.js"
+#    - "bower_components/foundation-sites/js/foundation.accordion.js"
+#    - "bower_components/foundation-sites/js/foundation.accordionMenu.js"
+#    - "bower_components/foundation-sites/js/foundation.drilldown.js"
+#    - "bower_components/foundation-sites/js/foundation.dropdown.js"
+#    - "bower_components/foundation-sites/js/foundation.dropdownMenu.js"
+#    - "bower_components/foundation-sites/js/foundation.equalizer.js"
+#    - "bower_components/foundation-sites/js/foundation.interchange.js"
+#    - "bower_components/foundation-sites/js/foundation.magellan.js"
+#    - "bower_components/foundation-sites/js/foundation.offcanvas.js"
+#    - "bower_components/foundation-sites/js/foundation.orbit.js"
+#    - "bower_components/foundation-sites/js/foundation.responsiveMenu.js"
+#    - "bower_components/foundation-sites/js/foundation.responsiveToggle.js"
+#    - "bower_components/foundation-sites/js/foundation.reveal.js"
+#    - "bower_components/foundation-sites/js/foundation.slider.js"
+#    - "bower_components/foundation-sites/js/foundation.sticky.js"
+#    - "bower_components/foundation-sites/js/foundation.tabs.js"
+#    - "bower_components/foundation-sites/js/foundation.toggler.js"
+#    - "bower_components/foundation-sites/js/foundation.tooltip.js"
+#    - "bower_components/foundation-sites/js/foundation.zf.responsiveAccordionTabs.js"
 
-    # Bootstrap 3
-    - "bower_components/bootstrap-sass/assets/javascripts/bootstrap.js"
+#    # Bootstrap 3 js
+#    - "bower_components/bootstrap-sass/assets/javascripts/bootstrap.js"
+
+    # Bootstrap 4 js
+    - "bower_components/tether/dist/js/tether.js"
+    - "bower_components/bootstrap/dist/js/bootstrap.js"
+
     # Paths to your own project code are here
-    
     - "src/assets/js/!(app).js"
     - "src/assets/js/app.js"

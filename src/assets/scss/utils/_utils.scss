@@ -1,0 +1,41 @@
+/*Examples:
+@include drop-shadow(#000, $angle: 45, $distance: 10px, $spread: 15, $size: 15px, $opacity: 25%);
+@include main-font(normal); options: light, normal, medium, bold
+@include letterspacing(75);
+font-size: getRem(24);
+
+
+In the file "_drop-shadow-to-css", recieves the values from photoshop shadow settings, make css box-shadow
+@include drop-shadow(#000, $angle: 45, $distance: 10px, $spread: 15, $size: 15px, $opacity: 25%);
+*/
+$rem: 16px !default;
+/* Receives the number of pixels, return calculated rem  */
+@function getRem($fontSize: 16) {
+	$remSize : $fontSize / $rem;
+  @return #{$remSize}rem;
+}
+/* Receives font style, return font-family statement (need to change the font and adapt to new styles)*/
+@mixin main-font($weight : normal) {
+	font-family: 'hk_grotesk', Arial, Helvetica, sans-serif;
+	font-style: normal;
+
+	@if $weight == bold {
+    	font-weight: 600;
+  	} @else if $weight == medium {
+    	font-weight: 500;
+  	} @else if $weight == light {
+    	font-weight: 300;
+  	} @else {
+    	font-weight: normal;
+  	}
+}
+/* Main serif font */
+@mixin serif-font() {
+	font-family: 'Times New Roman', Times, serif;
+}
+/* Takes the value from photoshop, return css letter-spacing expression */
+@mixin letterspacing($val) {
+  $result: ( $val / 1000 ) * 1em;
+  letter-spacing: $result;
+}
+

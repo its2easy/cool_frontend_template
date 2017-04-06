@@ -46,13 +46,13 @@ function clean(done) {
 
 // Copy files out of the assets folder
 // This task skips over the "img", "js", and "scss" folders, which are parsed separately
-// |всё что в assets и не js, scss, img скидывается а dist без изменений (шрифты)
+// |Everithing in "assets" and not in "js", "scss", "img" move to dist without changes (fonts)
 function copy() {
   return gulp.src(PATHS.assets)
     .pipe(gulp.dest(PATHS.dist + '/assets'));
 }
 
-// |копирует из папки to-root в корень dist
+// |copies from folder "to-root" to the root of "dist"
 function copyToRoot() {
   return gulp.src(PATHS.to_root)
     .pipe(gulp.dest(PATHS.dist));
@@ -78,7 +78,6 @@ function resetPages(done) {
   done();
 }
 
-
 // Compile Sass into CSS
 // In production, the CSS is compressed
 function sass() {
@@ -92,7 +91,7 @@ function sass() {
       browsers: COMPATIBILITY
     }))
     // Comment in the pipe below to run UnCSS in production
-    .pipe($.if(PRODUCTION, $.uncss(UNCSS_OPTIONS)))
+    //.pipe($.if(PRODUCTION, $.uncss(UNCSS_OPTIONS))) //uncomment if u like the risk (and add at least one option)
     .pipe($.if(PRODUCTION, $.cssnano()))
     .pipe($.if(!PRODUCTION, $.sourcemaps.write()))
     .pipe(gulp.dest(PATHS.dist + '/assets/css'))
@@ -101,11 +100,11 @@ function sass() {
 
 // Combine JavaScript into one file
 // In production, the file is minified
-// |babel for foundation
+// |babel for foundation (todo delete babel dependency)
 function javascript() {
   return gulp.src(PATHS.javascript)
     .pipe($.sourcemaps.init())
-    //.pipe($.babel({ignore: ['what-input.js']}))
+    //.pipe($.babel({ignore: ['what-input.js']}))//Uncomment if you use Foundation
     .pipe($.concat('app.js'))
     .pipe($.if(PRODUCTION, $.uglify()
       .on('error', e => { console.log(e); })
@@ -128,18 +127,18 @@ function images() {
 // |пути через PATHS не работают в некоторых местах
 function sprites() {
     var spriteData =
-        gulp.src(PATHS.sprites + '*.png') //выберем откуда брать изображения для объединения в спрайт
+        gulp.src(PATHS.sprites + '*.png') //Sources of images to merge in sprite
             .pipe(spritesmith({
-                imgName: 'sprite.png', //имя спрайтового изображения
-                cssName: '_sprites.scss', //имя стиля где храним позиции изображений в спрайте
-                imgPath: '../img/sprites/sprite.png', //путь где лежит спрайт
-                cssFormat: 'scss', //формат в котором обрабатываем позиции
+                imgName: 'sprite.png', //Name of sprite image
+                cssName: '_sprites.scss', //file with styles of sprite
+                imgPath: '../img/sprites/sprite.png', //path to place compiled sprite
+                cssFormat: 'scss', //Format of file with sprite styles
                 cssVarMap: function(sprite) {
-                    sprite.name = 'icon-' + sprite.name //имя каждого спрайта будет состоять из имени файла и конструкции 'icon-'
+                    sprite.name = 'icon-' + sprite.name //Generate sprite name 'icon-' + name of the file
                 }
             }));
-    spriteData.img.pipe(gulp.dest('dist/assets/img/sprites/')); // путь, куда сохраняем картинку
-    spriteData.css.pipe(gulp.dest('src/assets/scss/components')); // путь, куда сохраняем стили
+    spriteData.img.pipe(gulp.dest('dist/assets/img/sprites/')); // Destination path to the sprite image
+    spriteData.css.pipe(gulp.dest('src/assets/scss/components')); // Destination to the scss file with sprite styles
     return spriteData;
 }
 
@@ -158,7 +157,7 @@ function reload(done) {
 }
 
 // Watch for changes to static assets, pages, Sass, and JavaScript
-// |релоад сервера при изменении: статика, хтмл, цсс, жс, картинки, спрайты, шрифты
+// |reload server when changing: static, html, scss, js, images, sprites, fonts
 function watch() {
   // gulp.watch(PATHS.assets, copy);
   // gulp.watch(PATHS.to_root, copyToRoot);
