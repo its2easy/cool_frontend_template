@@ -1,0 +1,29 @@
+<!-- Modal -->
+<div class="modal fade modal-order" id="modal-order" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title modal-order__title">Modal title</h3>
+                <button type="button" class="close modal-order__close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <form action="" class="modal-order__form js-form-order">
+                    <div class="modal-order__subtitle">Оставьте свои данные и наш оператор свяжется с Вами в течение 10 минут</div>
+                    <input type="text" class="form-control modal-order__input modal-order__input_user" name="input__name" placeholder="Ваше имя" required>
+                    <input type="text" class="form-control modal-order__input modal-order__input_phone" name="input__phone" placeholder="Номер телефона" required>
+                    <input type="hidden" class="hidden__source" name="input__source" value="">
+                    <p class="form-text modal__success-text">
+                      Спасибо за отправку заявки!
+                    </p>
+                    <div class="modal-order__button-block">
+                        <button type="submit" class="btn button-primary modal-order__button js-button__send-form"><span>Отправить</span></button>
+                    </div>
+                </form>
+
+            </div><!-- /.modal-body -->
+        </div><!-- /.modal-contnet -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

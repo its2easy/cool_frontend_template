@@ -1,18 +1,21 @@
-{{!-- This is the base layout for your project, and will be used on every page. --}}
-
 <!doctype html>
 <html>
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+
     <title>Title of the site</title>
+    <meta name="description" content="Description of the site">
     <link rel="stylesheet" href="{{root}}assets/css/app.css">
   </head>
   <body>
 
     {{!-- Pages you create in the src/pages/ folder are inserted here when the flattened page is created. --}}
     {{> body}}
+
+    {{!-- {{>modal}}  --}}
+    {{!-- {{>svg}}  --}}
 
     <script src="{{root}}assets/js/app.js"></script>
   </body>

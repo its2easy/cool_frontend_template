@@ -1,5 +1,7 @@
 @charset "utf-8";
 //Only @import statements should be here
+@import 'components/project-variables';
+
 
 //Vendors imports
 //@import 'vendor/foundation/foundation-refs';
@@ -9,21 +11,20 @@
 //Libraries imports
 //add
 
-//Project imports
+//Project import
 @import 'utils/utils';
 @import 'utils/drop-shadow-to-css';
+
+//Components import
 @import 'components/sprites';
 @import 'components/general';
-@import 'components/header';
-@import 'components/menu';
-@import 'components/footer';
-
+@import 'components/modal';
 
 //Pages import
 @import 'pages/index';
 
-
-
+//Custom code import
+@import 'components/custom';
 
 
 
