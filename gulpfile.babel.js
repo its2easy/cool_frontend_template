@@ -8,9 +8,13 @@ import panini   from 'panini';
 import yaml     from 'js-yaml';
 import fs       from 'fs';
 
-var spritesmith = require('gulp.spritesmith');
-var del = require('del');
-
+const spritesmith = require('gulp.spritesmith');
+const del = require('del');
+const newer = require('gulp-newer');//filter existing files based mtime
+const debug = require('gulp-debug');//counting of the files passed
+const notify = require('gulp-notify');//errors handling (mb platform specific)
+const plumber = require('gulp-plumber');//errors handling
+const uncache = require('gulp-uncache');//disable browser cashing on changed files 
 
 // Load all Gulp plugins into one variable
 const $ = plugins();
@@ -28,12 +32,13 @@ function loadConfig() {
 
 // Build the "dist" folder by running all of the below tasks
 gulp.task('build',
- gulp.series(clean, gulp.parallel(pages, sass, javascript, images, sprites, copy, copyToRoot))
-        );
+ gulp.series(clean, gulp.parallel( gulp.series( gulp.parallel(sass, javascript), pages ), images, sprites, copy, copyToRoot))
+);
 
 // Build the site, run the server, and watch for file changes
 gulp.task('default',
-  gulp.series('build', server, watch));
+  gulp.series('build', server, watch)
+);
 
 // Delete the "dist" folder
 // This happens every time a build starts
@@ -49,12 +54,14 @@ function clean(done) {
 // |Everithing in "assets" and not in "js", "scss", "img" move to dist without changes (fonts)
 function copy() {
   return gulp.src(PATHS.assets)
+    .pipe(newer(PATHS.dist))//filter existent files
     .pipe(gulp.dest(PATHS.dist + '/assets'));
 }
 
 // |copies from folder "to-root" to the root of "dist"
 function copyToRoot() {
-  return gulp.src(PATHS.to_root)
+  return gulp.src( PATHS.to_root )
+    .pipe(newer(PATHS.dist))//filter existent files
     .pipe(gulp.dest(PATHS.dist));
 }
 
@@ -69,6 +76,13 @@ function pages() {
       data: 'src/data/',
       helpers: 'src/helpers/'
     }))
+    .pipe($.if(PRODUCTION, uncache({//disable browser cashe in production
+            append: 'hash',
+            rename: false,
+            srcDir: 'dist',
+            distDir: 'dist'
+            })
+    ))
     .pipe(gulp.dest(PATHS.dist));
 }
 
@@ -82,20 +96,23 @@ function resetPages(done) {
 // In production, the CSS is compressed
 function sass() {
   return gulp.src('src/assets/scss/app.scss')
+    .pipe(plumber({
+      errorHandler: notify.onError(err => ({
+        title: 'SCSS ERROR!',
+        message: err.message
+      }))
+    }))
     .pipe($.sourcemaps.init())
     .pipe($.sass({
       includePaths: PATHS.sass
     })
-      .on('error', $.sass.logError))
-    .pipe($.autoprefixer({
-      browsers: COMPATIBILITY
-    }))
+    .on('error', $.sass.logError))
+    .pipe($.if(PRODUCTION, $.autoprefixer({ browsers: COMPATIBILITY}) ))
     // Comment in the pipe below to run UnCSS in production
     //.pipe($.if(PRODUCTION, $.uncss(UNCSS_OPTIONS))) //uncomment if u like the risk (and add at least one option)
     .pipe($.if(PRODUCTION, $.cssnano()))
     .pipe($.if(!PRODUCTION, $.sourcemaps.write()))
     .pipe(gulp.dest(PATHS.dist + '/assets/css'))
-    .pipe(browser.reload({ stream: true }));
 }
 
 // Combine JavaScript into one file
@@ -103,8 +120,14 @@ function sass() {
 // |babel for foundation (todo delete babel dependency)
 function javascript() {
   return gulp.src(PATHS.javascript)
+    .pipe(plumber({
+      errorHandler: notify.onError(err => ({
+        title: 'JS ERROR!',
+        message: err.message
+      }))
+    }))
     .pipe($.sourcemaps.init())
-    //.pipe($.babel({ignore: ['what-input.js']}))//Uncomment if you use Foundation
+    //.pipe($.babel({ignore: ['what-input.js']}))//Uncomment if you're using Foundation
     .pipe($.concat('app.js'))
     .pipe($.if(PRODUCTION, $.uglify()
       .on('error', e => { console.log(e); })
@@ -116,8 +139,9 @@ function javascript() {
 // Copy images to the "dist" folder
 // In production, the images are compressed
 function images() {
-  return gulp.src(['src/assets/img/**/*','!src/assets/img/sprites/**/*', '!src/assets/img/sprites'])
-    .pipe($.if(PRODUCTION, $.imagemin({
+  return gulp.src(PATHS.images)
+    .pipe( newer(PATHS.dist + '/assets/img') )//filter existent files
+    .pipe( $.if(PRODUCTION, $.imagemin({
       progressive: true
     })))
     .pipe(gulp.dest(PATHS.dist + '/assets/img'));
@@ -128,11 +152,18 @@ function images() {
 function sprites() {
     var spriteData =
         gulp.src(PATHS.sprites + '*.png') //Sources of images to merge in sprite
+            .pipe(plumber({
+              errorHandler: notify.onError(err => ({
+                title: 'SPRITES ERROR!',
+                message: err.message
+              }))
+            }))
             .pipe(spritesmith({
                 imgName: 'sprite.png', //Name of sprite image
                 cssName: '_sprites.scss', //file with styles of sprite
-                imgPath: '../img/sprites/sprite.png', //path to place compiled sprite
+                imgPath: '../img/sprites/sprite.png?' + Date.now(), //path to place compiled sprite
                 cssFormat: 'scss', //Format of file with sprite styles
+                padding: 1,//space between images inside, restart 2 times after changing
                 cssVarMap: function(sprite) {
                     sprite.name = 'icon-' + sprite.name //Generate sprite name 'icon-' + name of the file
                 }
@@ -159,16 +190,17 @@ function reload(done) {
 // Watch for changes to static assets, pages, Sass, and JavaScript
 // |reload server when changing: static, html, scss, js, images, sprites, fonts
 function watch() {
-  // gulp.watch(PATHS.assets, copy);
-  // gulp.watch(PATHS.to_root, copyToRoot);
-  gulp.watch(PATHS.assets).on('all', gulp.series(copy, browser.reload));
-  gulp.watch(PATHS.to_root).on('all', gulp.series(copyToRoot, browser.reload));
-  gulp.watch('src/pages/**/*.html').on('all', gulp.series(pages, browser.reload));
-  gulp.watch('src/{layouts,partials}/**/*.html').on('all', gulp.series(resetPages, pages, browser.reload));
-  gulp.watch('src/assets/scss/**/*.scss').on('all', gulp.series(sass, browser.reload));
-  gulp.watch('src/assets/js/**/*.js').on('all', gulp.series(javascript, browser.reload));
-  gulp.watch(['src/assets/img/**/*','!src/assets/img/sprites/**/*', '!src/assets/img/sprites']).on('all', gulp.series(images, browser.reload));
-  gulp.watch(PATHS.sprites + '**/*').on('all', gulp.series(sprites, browser.reload));
+
+  gulp.watch(PATHS.assets, gulp.series(copy, reload) );
+  gulp.watch(PATHS.to_root, gulp.series(copyToRoot, reload) );
+  gulp.watch(PATHS.images).on('all', gulp.series(images, reload));
+
+  gulp.watch('src/pages/**/*.html').on('all', gulp.series(pages, reload));
+  gulp.watch('src/{layouts,partials}/**/*.html').on('all', gulp.series(resetPages, pages, reload));
+  //gulp.watch('src/assets/scss/**/*.scss').on('all', gulp.series(sass, reload));
+  gulp.watch(PATHS.watch_styles).on('all', gulp.series(sass, reload));//Try to fix performance issue
+  gulp.watch('src/assets/js/**/*.js').on('all', gulp.series(javascript, reload));
+  gulp.watch(PATHS.sprites + '**/*').on('all', gulp.series(sprites, reload));
 }
 
 

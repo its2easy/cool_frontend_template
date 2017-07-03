@@ -93,6 +93,18 @@ PATHS:
   # Content here will be copied to the root
   to_root:
     - "src/to-root/**/*"
+  # Images 
+  images:
+    - "src/assets/img/**/*"
+    - "!src/assets/img/sprites/**/*"
+    - "!src/assets/img/sprites"
+  # Paths to use in gulp.watch due to probable performance issue 
+  watch_styles:
+    - "src/assets/scss/*.scss"
+    - "src/assets/scss/components/*.scss"
+    - "src/assets/scss/pages/*.scss"
+    - "src/assets/scss/utils/*.scss"
+    - "src/assets/scss/vendor/*.scss"
   #Sprites
   sprites:
   - "src/assets/img/sprites/"
