@@ -3,7 +3,7 @@
 Template to compile frontend  
 Gulp config provides these features:
 
-- CSS: SCSS, UnCss, Autoprefixer, CSSNano, Sourcemap
+- CSS: SCSS, UnCss(disabled), Autoprefixer, CSSNano, Sourcemap
 - JS: Uglify, Concat, Babel, Sourcemap
 - Pages: Panini (Handlebars syntax)
 - Images: Imagemin
@@ -11,8 +11,6 @@ Gulp config provides these features:
 - Server: live-reload via browser-sync
  
 There are the possibility to use on of these frameworks:
-* Foundation6
-* Bootstrap3
 * Bootstrap4
 
 Before start change the settings to use one of them (default *Bootstrap 4*)
@@ -36,7 +34,6 @@ Source files of the frameworks and libraries are in *bower_components* folder
 ```bash
 cd projectname-folder
 npm install
-bower install
 ```
 ## Run
 
