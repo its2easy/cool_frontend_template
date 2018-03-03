@@ -107,7 +107,7 @@ function sass() {
       includePaths: PATHS.sass
     })
     .on('error', $.sass.logError))
-    .pipe($.if(PRODUCTION, $.autoprefixer({ browsers: COMPATIBILITY}) ))
+    .pipe($.if(PRODUCTION, $.autoprefixer() ))
     // Comment in the pipe below to run UnCSS in production
     //.pipe($.if(PRODUCTION, $.uncss(UNCSS_OPTIONS))) //uncomment if u like the risk (and add at least one option)
     .pipe($.if(PRODUCTION, $.cssnano()))
