@@ -1,4 +1,3 @@
-//$(document).foundation(); //uncomment if you use foundation
 $( document ).ready(function() {
 
 
@@ -22,9 +21,11 @@ $('.js-form-order').on('submit',function(e) {
     var dataToSend = form.serialize();
     var button = form.find('.js-button__send-form');
 
+ 	//dataToSend += '&source=' + encodeURIComponent(form.data('source')); //extend dataToSend
+
     // Form reaction on sending 
     button.attr('disabled',true);
-    button.find('span').text('Отправка...');
+    button.text('Отправка...');
     form.find('input').attr('disabled',true);
 
     // Send
@@ -35,15 +36,15 @@ $('.js-form-order').on('submit',function(e) {
                 data: dataToSend,
 
                 success: function(response) {
-                    button.find('span').text(response);
+                    button.text(response);
                   	button.prop('disabled', false);
-                    form.find('input').attr('disabled',true);
-                    form.find('.modal__success-text').fadeIn();
+                    form.find('input').attr('disabled',false);
+                    //form.find('.modal__success-text').fadeIn();
                     form.trigger( 'reset' );
                 },
                 error: function(response) {
-                    button.find('span').text("Неуспешно");
-                    form.find('input').attr('disabled',true);
+                    button.text("Неуспешно");
+                    form.find('input').attr('disabled',false);
                     form.trigger( 'reset' );
                 }
     });
@@ -62,3 +63,41 @@ $('.modal').on('hide.bs.modal', function (e) {
     $(this).find('form').trigger('reset');
 })
 */
+
+
+// анимация загрузки страницы полосой сверху, поместить сразу после html кода страницы
+// <script>
+// //анимация полосы загрзки страницы, на DOMContentLoaded слишком поздно
+// var images = document.images,
+//     imagesCount = images.length,
+//     imagesLoadedCount = 0,
+//     preloadBlock = document.getElementById('tables-preload');
+//
+// for (var i = 0; i < imagesCount; i++){
+//     image_clone = new  Image();
+//     image_clone.onload = imageLoaded;
+//     image_clone.onerror = imageLoaded;
+//     image_clone.src = images[i].src;
+// }
+// function imageLoaded() {
+//     imagesLoadedCount++;
+//     var percent = (( 100 / imagesCount) * imagesLoadedCount) << 0;
+//     preloadBlock.style.width = percent + '%';
+//     //console.log(percent);
+//
+//     if (imagesLoadedCount >= imagesCount){
+//         setTimeout(function () {
+//             if (!preloadBlock.classList.contains('done')){
+//                 preloadBlock.classList.add('done');
+//             }
+//         }, 500);
+//     }
+// }
+// </script>
+
+
+//test is mobile device
+// var isMobile = false;
+// if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+//     isMobile = true;
+// }
