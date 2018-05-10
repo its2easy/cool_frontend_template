@@ -5,53 +5,12 @@ PORT: 8000
 UNCSS_OPTIONS:
   html:
     - "src/**/*.html"
-  ignore:
-    # Foundation
-#     - !!js/regexp .foundation-mq
-#     - !!js/regexp ^\.is-.*
-#    #   motion UI
-#     - !!js/regexp ^\.(fade|slide|hinge|scale|spin)
-#     - !!js/regexp ^\.mui-.*
-    ## Bootstrap3
-#    - !!js/regexp \w\.in
-#    - '.fade'
-#    - '.collapse'
-#    - '.collapsing'
-#    - !!js/regexp (#|\.)navbar(\-[a-zA-Z]+)?
-#    - !!js/regexp (#|\.)dropdown(\-[a-zA-Z]+)?
-#    - !!js/regexp (#|\.)(open)
-#    - !!js/regexp (#|\.)carousel(\-[a-zA-Z]+)?
-#    - '.modal'
-#    - '.modal.fade.in'
-#    - '.modal-dialog'
-#    - '.modal-document'
-#    - '.modal-scrollbar-measure'
-#    - '.modal-backdrop.fade'
-#    - '.modal-backdrop.in'
-#    - '.modal.fade.modal-dialog'
-#    - '.modal.in.modal-dialog'
-#    - '.modal-open'
-#    - '.in'
-#    - '.modal-backdrop'
-#    - !!js/regexp \.affix
-#    - !!js/regexp \.alert
-#    - !!js/regexp \.close
-#    - !!js/regexp \.has
-#    - !!js/regexp \.help
-#    - !!js/regexp \.popover
-#    - !!js/regexp \.tooltip
-#    - !!js/regexp \.in
-#    - !!js/regexp \.slick
-#    #Custom
-#    - '.overflow-toggle'
-#    - !!js/regexp \.lg
-#    #Bootstrap4
-#    #todo Google it!
 
 # Gulp will reference these paths when it copies files
 PATHS:
   # Path to dist folder
-  dist: "dist"  
+  dist: "dist"
+
   # clear dist folder not touching heroku files
   delete_dist_options:
     - "dist/**/*"
@@ -59,31 +18,30 @@ PATHS:
     - "!dist/index.php"
     - "!dist/.git"
     - "!dist/.git/**/*"
+
   # Paths to static assets that aren't images, CSS, or JavaScript
   assets:
     - "src/assets/**/*"
     - "!src/assets/{img,js,scss}"
     - "!src/assets/{img,js,scss}/**/*"
+
   # Content here will be copied to the root
   to_root:
     - "src/to-root/**/*"
+
   # Images 
   images:
     - "src/assets/img/**/*"
     - "!src/assets/img/sprites/**/*"
     - "!src/assets/img/sprites"
+
   # Paths to use in gulp.watch due to probable performance issue 
   watch_styles:
-    - "src/assets/scss/*.scss"
-    - "src/assets/scss/app/components/*.scss"
-    - "src/assets/scss/app/pages/*.scss"
-    - "src/assets/scss/app/partials/*.scss"
-    - "src/assets/scss/vendor/*.scss"
+    - "src/assets/scss/**/*.scss"
+
   #Sprites
   sprites:
   - "src/assets/img/sprites/"
-  # Paths to Sass libraries, which can then be loaded with @import
-  sass:
 
   # Paths to JavaScript libraries, which are combined into one file
   javascript:
@@ -91,7 +49,7 @@ PATHS:
     - "src/assets/js/vendor/jquery/jquery-3.3.1.js"
 
     # Bootstrap 4 js
-    - "src/assets/js/vendor/bootstrap4/bootstrap.min.js"
+    - "src/assets/js/vendor/bootstrap4/bootstrap.bundle.js"
 
     # Paths to your own project code are here
     - "src/assets/js/!(app).js"

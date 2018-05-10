@@ -1,9 +1,8 @@
-/*========= BOOTSTRAP 4 ===================*/
+/*========= BOOTSTRAP 4.1.1 ===================*/
 @import "vendor/bootstrap4/functions";
 @import "vendor/bootstrap4/variables";
 @import "vendor/bootstrap4/mixins";
 @import "vendor/bootstrap4/root";
-@import "vendor/bootstrap4/print";
 @import "vendor/bootstrap4/reboot";
 @import "vendor/bootstrap4/type";
 @import "vendor/bootstrap4/images";
@@ -34,3 +33,4 @@
 @import "vendor/bootstrap4/popover";
 @import "vendor/bootstrap4/carousel";
 @import "vendor/bootstrap4/utilities";
+@import "vendor/bootstrap4/print";

@@ -1,1 +1,121 @@
 
+body{
+
+}
+
+a{
+    transition: all 0.3s ease;
+    &:hover,
+    &:focus,
+    &:active{
+
+    }
+}
+img{
+    max-width: 100%;
+    height:auto;
+}
+h1{
+
+}
+h2, h3, h4, h5, h6{
+
+}
+h2{
+
+}
+h3{
+
+}
+h4{
+
+}
+h5{
+
+}
+h6{
+
+}
+
+p{
+    &:last-child,
+    &:last-of-type{
+
+    }
+}
+
+.wrap{
+
+}
+
+
+
+
+// Extra small devices (portrait phones, less than 576px)
+@include media-breakpoint-only(xs) {
+
+}
+// Small devices (landscape phones, 576px and up)
+@include media-breakpoint-only(sm) {
+
+}
+
+// Medium devices (tablets, 768px and up)
+@include media-breakpoint-only(md) {
+
+}
+
+// Large devices (desktops, 992px and up)
+@include media-breakpoint-only(lg) {
+
+}
+
+// Extra large devices (large desktops, 1200px and up)
+@include media-breakpoint-only(xl) {
+
+}
+
+
+
+.test::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+
+}
+.test::-moz-placeholder { /* Firefox 19+ */
+
+}
+.test:-ms-input-placeholder { /* IE 10+ */
+
+}
+.test::-ms-input-placeholder { /*  Microsoft Edge+ */
+
+}
+.test:-moz-placeholder { /* Firefox 18- */
+
+}
+.test::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+
+}
+
+// Extra small devices (portrait phones, less than 576px)
+@include media-breakpoint-only(xs) {
+
+}
+// Small devices (landscape phones, 576px and up)
+@include media-breakpoint-only(sm) {
+
+}
+
+// Medium devices (tablets, 768px and up)
+@include media-breakpoint-only(md) {
+
+}
+
+// Large devices (desktops, 992px and up)
+@include media-breakpoint-only(lg) {
+
+}
+
+// Extra large devices (large desktops, 1200px and up)
+@include media-breakpoint-only(xl) {
+
+}

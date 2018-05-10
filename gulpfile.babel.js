@@ -103,14 +103,14 @@ function sass() {
       }))
     }))
     .pipe($.sourcemaps.init())
-    .pipe($.sass({
-      includePaths: PATHS.sass
-    })
+    .pipe($.sass({})
     .on('error', $.sass.logError))
     .pipe($.if(PRODUCTION, $.autoprefixer() ))
     // Comment in the pipe below to run UnCSS in production
     //.pipe($.if(PRODUCTION, $.uncss(UNCSS_OPTIONS))) //uncomment if u like the risk (and add at least one option)
-    .pipe($.if(PRODUCTION, $.cssnano()))
+    .pipe($.if(PRODUCTION, $.cssnano({
+        safe: true
+    })))
     .pipe($.if(!PRODUCTION, $.sourcemaps.write()))
     .pipe(gulp.dest(PATHS.dist + '/assets/css'))
 }
@@ -134,6 +134,12 @@ function javascript() {
     ))
     .pipe($.if(!PRODUCTION, $.sourcemaps.write()))
     .pipe(gulp.dest(PATHS.dist + '/assets/js'));
+
+
+    // //for easier changes, just copy all files from src/js to dist/js
+    // return gulp.src( PATHS.javascript )
+    //     .pipe(newer(PATHS.dist + '/assets/js'))//filter existent files
+    //     .pipe(gulp.dest(PATHS.dist + '/assets/js'));
 }
 
 // Copy images to the "dist" folder
@@ -141,9 +147,9 @@ function javascript() {
 function images() {
   return gulp.src(PATHS.images)
     .pipe( newer(PATHS.dist + '/assets/img') )//filter existent files
-    .pipe( $.if(PRODUCTION, $.imagemin({
-      progressive: true
-    })))
+    // .pipe( $.if(PRODUCTION, $.imagemin({ //enable if you need it
+    //   progressive: true
+    // })))
     .pipe(gulp.dest(PATHS.dist + '/assets/img'));
 }
 
@@ -190,17 +196,14 @@ function reload(done) {
 // Watch for changes to static assets, pages, Sass, and JavaScript
 // |reload server when changing: static, html, scss, js, images, sprites, fonts
 function watch() {
-
-  gulp.watch(PATHS.assets, gulp.series(copy, reload) );
-  gulp.watch(PATHS.to_root, gulp.series(copyToRoot, reload) );
-  gulp.watch(PATHS.images).on('all', gulp.series(images, reload));
-
-  gulp.watch('src/pages/**/*.html').on('all', gulp.series(pages, reload));
-  gulp.watch('src/{layouts,partials}/**/*.html').on('all', gulp.series(resetPages, pages, reload));
-  //gulp.watch('src/assets/scss/**/*.scss').on('all', gulp.series(sass, reload));
-  gulp.watch(PATHS.watch_styles).on('all', gulp.series(sass, reload));//Try to fix performance issue
-  gulp.watch('src/assets/js/**/*.js').on('all', gulp.series(javascript, reload));
-  gulp.watch(PATHS.sprites + '**/*').on('all', gulp.series(sprites, reload));
+  gulp.watch(PATHS.assets, gulp.series(copy, reload) );//fonts, pure css from assets folder
+  gulp.watch(PATHS.to_root, gulp.series(copyToRoot, reload) );//simple files for root
+  gulp.watch(PATHS.images).on('all', gulp.series(images, reload));//images
+  gulp.watch('src/pages/**/*.html').on('all', gulp.series(pages, reload));//html pages
+  gulp.watch('src/{layouts,partials}/**/*.html').on('all', gulp.series(resetPages, pages, reload));//html layouts
+  gulp.watch(PATHS.watch_styles).on('all', gulp.series(sass, reload));//scss
+  gulp.watch('src/assets/js/**/*.js').on('all', gulp.series(javascript, reload));//js
+  gulp.watch(PATHS.sprites + '**/*').on('all', gulp.series(sprites, reload));//sprites
 }
 
 

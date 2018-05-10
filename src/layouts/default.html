@@ -5,19 +5,32 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
 
-    <title>Title of the site</title>
-    <meta name="description" content="Description of the site">
+    <title>Title</title>
+    <meta name="description" content="">
+
+    <!--uncomment if you have vendor css files in src/css-->
+    <!--<link rel="stylesheet" href="{{root}}assets/css/vendor/name/name.min.css">-->
+
     <!--uncache-->
     <link rel="stylesheet" href="{{root}}assets/css/app.css">
     <!--enduncache-->
   </head>
   <body>
 
-    {{!-- Pages you create in the src/pages/ folder are inserted here when the flattened page is created. --}}
-    {{> body}}
+    <div class="wrap">
+      {{> header }}
+      {{> body}}
+      {{> footer }}
+    </div>
 
     {{!-- {{>modal}}  --}}
     {{!-- {{>svg}}  --}}
+
+
+    <!--uncomment if not using gulp minifying an concat for js-->
+    <!--<script src="assets/js/vendor/jquery/jquery-3.3.1.min.js"></script>-->
+    <!--<script src="assets/js/vendor/bootstrap4/bootstrap.bundle.min.js"></script>-->
+
     <!--uncache-->
     <script src="{{root}}assets/js/app.js"></script>
     <!--enduncache-->

@@ -8,22 +8,22 @@
 /*============================ COMMON STYLES ================*/
 @import 'app/common';
 
-
 /*============================COMPONENTS ================*/
 //Project import
 @import 'app/components/utils';
 @import 'app/components/drop-shadow-to-css';
 @import 'app/components/sprites';
 @import 'app/components/fonts';
+@import 'app/components/form-elements';
 
 /*============================ PARTIALS ================*/
+@import 'app/components/modal';
 @import 'app/partials/header';
 @import 'app/partials/footer';
 
-
-
 /*============================ PAGES ================*/
 @import 'app/pages/index';
+
 
 
 

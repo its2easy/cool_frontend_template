@@ -3,19 +3,17 @@
 Template to compile frontend  
 Gulp config provides these features:
 
-- CSS: SCSS, UnCss(disabled), Autoprefixer, CSSNano, Sourcemap
-- JS: Uglify, Concat, Babel, Sourcemap
+- CSS: SCSS, Autoprefixer, CSSNano, Sourcemap
+- JS: Uglify, Concat, Babel(for gulpfile now), Sourcemap
 - Pages: Panini (Handlebars syntax)
-- Images: Imagemin
+- Images: Imagemin (disabled by default)
 - Sprites: gulp.spritesmith
 - Server: live-reload via browser-sync
  
 
-* In **config.yml** comment and uncomment settings in sections:
-    * COMPATIBILITY
-    * UNCSS_OPTIONS
-    * sass
-    * js
+In **config.yml** list of js files if using concat and minifying
+
+Pure css  files can be placed in **src/css/** to avoid compilation
 
 
 Png images to make a sprite should be in *src/assets/img/sprites/*  
