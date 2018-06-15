@@ -28,6 +28,11 @@ All of scss imports are in **app.scss**, all vendor imports are in *src/assets/s
 cd projectname-folder
 npm install
 ```
+
+In case of errors during the installation try to install this 
+[https://github.com/nodejs/node-gyp](https://github.com/nodejs/node-gyp) 
+and repeat. Tested with node v10.4.1/
+
 ## Run
 
 For development:
