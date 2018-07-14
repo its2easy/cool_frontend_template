@@ -11,7 +11,7 @@ import fs       from 'fs';
 const spritesmith = require('gulp.spritesmith');
 const del = require('del');
 const newer = require('gulp-newer');//filter existing files based mtime
-const debug = require('gulp-debug');//counting of the files passed
+// const debug = require('gulp-debug');//counting of the files passed
 const notify = require('gulp-notify');//errors handling (mb platform specific)
 const plumber = require('gulp-plumber');//errors handling
 const uncache = require('gulp-uncache');//disable browser cashing on changed files 
@@ -102,12 +102,10 @@ function sass() {
         message: err.message
       }))
     }))
-    .pipe($.sourcemaps.init())
+    .pipe($.if(!PRODUCTION, $.sourcemaps.init()))
     .pipe($.sass({})
     .on('error', $.sass.logError))
     .pipe($.if(PRODUCTION, $.autoprefixer() ))
-    // Comment in the pipe below to run UnCSS in production
-    //.pipe($.if(PRODUCTION, $.uncss(UNCSS_OPTIONS))) //uncomment if u like the risk (and add at least one option)
     .pipe($.if(PRODUCTION, $.cssnano({
         safe: true
     })))
@@ -147,9 +145,13 @@ function javascript() {
 function images() {
   return gulp.src(PATHS.images)
     .pipe( newer(PATHS.dist + '/assets/img') )//filter existent files
-    // .pipe( $.if(PRODUCTION, $.imagemin({ //enable if you need it
-    //   progressive: true
-    // })))
+    // .pipe( $.if(PRODUCTION, $.imagemin(
+    //     [ //enable if you need it
+    //         $.imagemin.gifsicle({interlaced: true}),
+    //         $.imagemin.jpegtran({progressive: false}),
+    //         $.imagemin.optipng({optimizationLevel: 3}),
+    //     ]
+    // )))
     .pipe(gulp.dest(PATHS.dist + '/assets/img'));
 }
 
