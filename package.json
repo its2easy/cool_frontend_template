@@ -1,6 +1,6 @@
 {
   "name": "cool_frontend_template",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "Template to build frontend.",
   "main": "gulpfile.js",
   "scripts": {

@@ -1,5 +1,4 @@
 /*========= BOOTSTRAP 4.1.2 ===================*/
-
 @import "vendor/bootstrap4/functions";
 @import "vendor/bootstrap4/variables";
 @import "vendor/bootstrap4/mixins";
@@ -35,3 +34,6 @@
 @import "vendor/bootstrap4/carousel";
 @import "vendor/bootstrap4/utilities";
 @import "vendor/bootstrap4/print";
+
+/*========= SLICK 1.8.0 ===================*/
+@import "vendor/slick/slick.scss";

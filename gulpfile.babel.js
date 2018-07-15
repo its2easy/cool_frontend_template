@@ -11,7 +11,6 @@ import fs       from 'fs';
 const spritesmith = require('gulp.spritesmith');
 const del = require('del');
 const newer = require('gulp-newer');//filter existing files based mtime
-// const debug = require('gulp-debug');//counting of the files passed
 const notify = require('gulp-notify');//errors handling (mb platform specific)
 const plumber = require('gulp-plumber');//errors handling
 const uncache = require('gulp-uncache');//disable browser cashing on changed files 

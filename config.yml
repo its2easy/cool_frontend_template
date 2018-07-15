@@ -47,9 +47,10 @@ PATHS:
   javascript:
     # jquery 3
     - "src/assets/js/vendor/jquery/jquery-3.3.1.js"
-
     # Bootstrap 4 js
     - "src/assets/js/vendor/bootstrap4/bootstrap.bundle.js"
+    # Slick 1.8.0
+    - "src/assets/js/vendor/slick/slick.js"
 
     # Paths to your own project code are here
     - "src/assets/js/!(app).js"
