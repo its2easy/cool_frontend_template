@@ -55,3 +55,6 @@ PATHS:
     # Paths to your own project code are here
     - "src/assets/js/!(app).js"
     - "src/assets/js/app.js"
+
+    # if not need js to be processed, comment paths above and uncomment below
+    #- "src/assets/js/**/*"

@@ -1,12 +1,12 @@
 /*Examples:
-@include drop-shadow(#000, $angle: 45, $distance: 10px, $spread: 15, $size: 15px, $opacity: 25%);
+@include drop-shadow(#000, $angle: 135, $distance: 7px, $spread: 0, $size: 5px, $opacity: 25%);
 @include main-font(normal); options: light, normal, medium, bold
 @include letterspacing(75);
 font-size: getRem(24);
 
 
 In the file "_drop-shadow-to-css", recieves the values from photoshop shadow settings, make css box-shadow
-@include drop-shadow(#000, $angle: 45, $distance: 10px, $spread: 15, $size: 15px, $opacity: 25%);
+@include drop-shadow(#000, $angle: 145, $distance: 7px, $spread: 0, $size: 5px, $opacity: 25%);
 */
 $rem: 16px !default;
 /* Receives the number of pixels, return calculated rem  */
