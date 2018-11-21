@@ -14,7 +14,7 @@
     "babel-register": "^6.26.0",
     "browser-sync": "^2.20.0",
     "del": "^3.0.0",
-    "gulp": "github:gulpjs/gulp#4.0",
+    "gulp": "4.0",
     "gulp-autoprefixer": "^5.0.0",
     "gulp-babel": "^7.0.1",
     "gulp-cli": "^2.0.0",
