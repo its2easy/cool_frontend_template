@@ -1,15 +1,24 @@
 'use strict';
 
-const plugins = require('gulp-load-plugins')(),
-     yargs = require('yargs'),
+const yargs = require('yargs'),
      browser = require('browser-sync'),
      gulp = require('gulp'),
+     gulpif = require('gulp-if'),
+     newer = require('gulp-newer'),
+     uncache = require('gulp-uncache'),
+     plumber = require('gulp-plumber'),
+     notify = require("gulp-notify"),
+     sourcemaps = require('gulp-sourcemaps'),
+     gulpSass = require('gulp-sass'),
+     concat = require('gulp-concat'),
+     uglify = require('gulp-uglify'),
      panini = require('panini'),
      spritesmith = require('gulp.spritesmith'),
-     del = require('del');
+     del = require('del'),
+     postcss    = require('gulp-postcss'),
+     autoprefixer = require('autoprefixer'),
+     cssnano = require('cssnano');
 
-// load by 'gulp-load-plugins': gulp-autoprefixer, gulp-babel, gulp-concat, gulp-cssnano, gulp-if, gulp-imagemin, gulp-sass,
-//gulp-sourcemaps, gulp-uglify, gulp-notify, gulp-plumber
 //gulp-newer - filter existing files based mtime
 //gulp-uncache - disable browser cashing on changed files
 
@@ -24,16 +33,13 @@ const PATHS = {
         ],
         assets: [
             "src/assets/**/*",
-            "!src/assets/{img,js,scss}",
-            "!src/assets/{img,js,scss}/**/*"
-        ],
-        scss_main_file: 'src/assets/scss/app.scss',
-        to_root: "src/to-root/**/*",
-        images: [
-            "src/assets/img/**/*",
+            "!src/assets/{js,scss}",
+            "!src/assets/{js,scss}/**/*",
             "!src/assets/img/sprites/**/*",
             "!src/assets/img/sprites"
         ],
+        scss_main_file: 'src/assets/scss/app.scss',
+        to_root: "src/to-root/**/*",
         watch_styles: "src/assets/scss/**/*.scss",
         sprites: "src/assets/img/sprites/",
         javascript: [
@@ -69,14 +75,15 @@ function clean(done) {
 // |Everithing in "assets" and not in "js", "scss", "img" move to dist without changes (fonts, css)
 function copy() {
   return gulp.src(PATHS.assets)
-    .pipe(plugins.newer(PATHS.dist))//filter existent files
+    .pipe(newer(PATHS.dist))//filter existent files
     .pipe(gulp.dest(PATHS.dist + '/assets'));
 }
+
 
 // |copies from folder "to-root" to the root of "dist"
 function copyToRoot() {
   return gulp.src( PATHS.to_root )
-    .pipe(plugins.newer(PATHS.dist))//filter existent files
+    .pipe(newer(PATHS.dist))//filter existent files
     .pipe(gulp.dest(PATHS.dist));
 }
 
@@ -93,7 +100,7 @@ function pages() {
       data: 'src/data/',
       helpers: 'src/helpers/'
     }))
-    .pipe(plugins.if(PRODUCTION, plugins.uncache({//disable browser cashe in production
+    .pipe(gulpif(PRODUCTION, uncache({//disable browser cashe in production
                 append: 'hash', rename: false, srcDir: PATHS.dist, distDir: PATHS.dist
             })
     ))
@@ -111,17 +118,21 @@ function resetPages(done) {
 // In production, the CSS is compressed
 function sass() {
   return gulp.src(PATHS.scss_main_file)
-    .pipe(plugins.plumber({
-      errorHandler: plugins.notify.onError(err => ({
+    .pipe(plumber({
+      errorHandler: notify.onError(err => ({
         title: 'SCSS ERROR!', message: err.message
       }))
     }))
-    .pipe(plugins.if(!PRODUCTION, plugins.sourcemaps.init()))
-    .pipe(plugins.sass({})
-    .on('error', plugins.sass.logError))
-    .pipe(plugins.if(PRODUCTION, plugins.autoprefixer() ))
-    .pipe(plugins.if(PRODUCTION, plugins.cssnano({ safe: true })))
-    .pipe(plugins.if(!PRODUCTION, plugins.sourcemaps.write()))
+    .pipe(gulpif(!PRODUCTION, sourcemaps.init()))
+    .pipe(gulpSass({})
+    .on('error', gulpSass.logError))
+      .pipe( gulpif(PRODUCTION, postcss(
+          [
+              autoprefixer(),
+              cssnano()
+          ]
+      ) ) )
+    .pipe(gulpif(!PRODUCTION, sourcemaps.write()))
     .pipe(gulp.dest(PATHS.dist + '/assets/css'))
 }
 
@@ -131,43 +142,28 @@ function sass() {
 // 1) Version with concatenation and minification
 function javascript() {
   return gulp.src(PATHS.javascript)
-    .pipe(plugins.plumber({
-      errorHandler: plugins.notify.onError(err => ({
+    .pipe(plumber({
+      errorHandler: notify.onError(err => ({
         title: 'JS ERROR!', message: err.message
       }))
     }))
-    .pipe(plugins.sourcemaps.init())
-    .pipe(plugins.concat('app.js'))
-    .pipe(plugins.if(PRODUCTION, plugins.uglify()
+    .pipe(sourcemaps.init())
+    .pipe(concat('app.js'))
+    .pipe(gulpif(PRODUCTION, uglify()
       .on('error', e => { console.log(e); })
     ))
-    .pipe(plugins.if(!PRODUCTION, plugins.sourcemaps.write()))
+    .pipe(gulpif(!PRODUCTION, sourcemaps.write()))
     .pipe(gulp.dest(PATHS.dist + '/assets/js'));
 }
 // 2) Version with just copy all js files from src/js to dist/js
 // function javascript() {
 //     return gulp.src( PATHS.javascript )
-//         .pipe(plugins.newer(PATHS.dist + '/assets/js'))//filter existent files
+//         .pipe(newer(PATHS.dist + '/assets/js'))//filter existent files
 //         .pipe(gulp.dest(PATHS.dist + '/assets/js'));
 // }
 
 
 //================ IMAGES
-
-// Copy images to the "dist" folder
-// In production, the images are compressed
-function images() {
-  return gulp.src(PATHS.images)
-    //.pipe( plugins.newer(PATHS.dist + '/assets/img') )//filter existent files
-    // .pipe( plugins.if(PRODUCTION, plugins.imagemin(
-    //     [ //enable if you need it
-    //         plugins.imagemin.gifsicle({interlaced: true}),
-    //         plugins.imagemin.jpegtran({progressive: false}),
-    //         plugins.imagemin.optipng({optimizationLevel: 3}),
-    //     ]
-    // )))
-    .pipe(gulp.dest(PATHS.dist + '/assets/img'));
-}
 
 //Sprites
 //|options with PATHS may not work
@@ -175,8 +171,8 @@ function images() {
 // function sprites() {
 //     var spriteData =
 //         gulp.src(PATHS.sprites + '*.png') //Sources of images to merge in sprite
-//             .pipe(plugins.plumber({
-//               errorHandler: plugins.notify.onError(err => ({
+//             .pipe(plumber({
+//               errorHandler: notify.onError(err => ({
 //                 title: 'SPRITES ERROR!',
 //                 message: err.message
 //               }))
@@ -216,7 +212,6 @@ function reload(done) {
 function watch() {
   gulp.watch(PATHS.assets, gulp.series(copy, reload) );//fonts, pure css from assets folder
   gulp.watch(PATHS.to_root, gulp.series(copyToRoot, reload) );//simple files for root
-  gulp.watch(PATHS.images).on('all', gulp.series(images, reload));//images
   gulp.watch('src/pages/**/*.html').on('all', gulp.series(pages, reload));//html pages
   gulp.watch('src/{layouts,partials}/**/*.html').on('all', gulp.series(resetPages, pages, reload));//html layouts
   gulp.watch(PATHS.watch_styles).on('all', gulp.series(sass, reload));//scss
@@ -225,7 +220,7 @@ function watch() {
 }
 
 //Public tasks
-const build = gulp.series(clean, gulp.parallel( gulp.series( gulp.parallel(sass, javascript), pages ), images, copy, copyToRoot));
+const build = gulp.series(clean, gulp.parallel( gulp.series( gulp.parallel(sass, javascript), pages ), copy, copyToRoot));
 exports.build = build;
 exports.default = gulp.series(build, server, watch);
 

@@ -6,7 +6,6 @@ Gulp config provides these features:
 - CSS: SCSS, Autoprefixer, CSSNano, Sourcemap
 - JS: Uglify, Concat, Sourcemap
 - Pages: Panini (Handlebars syntax)
-- Images: Imagemin (disabled by default)
 - Sprites: gulp.spritesmith (disabled by default)
 - Server: live-reload via browser-sync
  

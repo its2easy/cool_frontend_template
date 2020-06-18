@@ -7,4 +7,3 @@ dist
 *.psd
 psd/
 .idea/
-/package-lock.json
