@@ -34,16 +34,5 @@
     "type": "git",
     "url": "https://github.com/its2easy/cool_frontend_template.git"
   },
-  "browserslist": [
-    "Android 2.3",
-    "Android >= 4",
-    "Chrome >= 26",
-    "Firefox >= 38",
-    "Edge >= 12",
-    "Explorer >= 10",
-    "iOS >= 8",
-    "Opera >= 12",
-    "Safari >= 8"
-  ],
   "dependencies": {}
 }
