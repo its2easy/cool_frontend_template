@@ -7,7 +7,6 @@ const yargs = require('yargs'),
      newer = require('gulp-newer'),
      uncache = require('gulp-uncache'),
      plumber = require('gulp-plumber'),
-     notify = require("gulp-notify"),
      sourcemaps = require('gulp-sourcemaps'),
      gulpSass = require('gulp-sass'),
      concat = require('gulp-concat'),
@@ -17,7 +16,8 @@ const yargs = require('yargs'),
      del = require('del'),
      postcss    = require('gulp-postcss'),
      autoprefixer = require('autoprefixer'),
-     cssnano = require('cssnano');
+     cssnano = require('cssnano'),
+     beeper = require('beeper');
 
 //gulp-newer - filter existing files based mtime
 //gulp-uncache - disable browser cashing on changed files
@@ -43,14 +43,14 @@ const PATHS = {
         watch_styles: "src/assets/scss/**/*.scss",
         sprites: "src/assets/img/sprites/",
         javascript: [
-            "src/assets/js/vendor/jquery/jquery-3.3.1.js",
+            "src/assets/js/vendor/jquery/jquery-3.5.1.js",
             "src/assets/js/vendor/bootstrap4/bootstrap.bundle.js",
             "src/assets/js/vendor/slick/slick.js",
             "src/assets/js/!(app).js",
             "src/assets/js/app.js",
         ],
         //option if js doesn't need to be compiled
-        //javascript: "src/assets/js/**/*",
+        javascriptCopy: "src/assets/js/**/*",
     },
     OPTIONS = {
         port: 8000
@@ -117,23 +117,20 @@ function resetPages(done) {
 // Compile Sass into CSS
 // In production, the CSS is compressed
 function sass() {
-  return gulp.src(PATHS.scss_main_file)
-    .pipe(plumber({
-      errorHandler: notify.onError(err => ({
-        title: 'SCSS ERROR!', message: err.message
-      }))
-    }))
-    .pipe(gulpif(!PRODUCTION, sourcemaps.init()))
-    .pipe(gulpSass({})
-    .on('error', gulpSass.logError))
-      .pipe( gulpif(PRODUCTION, postcss(
-          [
-              autoprefixer(),
-              cssnano()
-          ]
-      ) ) )
-    .pipe(gulpif(!PRODUCTION, sourcemaps.write()))
-    .pipe(gulp.dest(PATHS.dist + '/assets/css'))
+    return gulp.src(PATHS.scss_main_file)
+        .pipe(gulpif(!PRODUCTION, sourcemaps.init()))
+        .pipe(gulpSass({}).on('error', gulpSass.logError))
+        .on('error', (err) => {
+            beeper(1);
+        })
+        .pipe(gulpif(PRODUCTION, postcss(
+            [
+                autoprefixer(),
+                cssnano()
+            ]
+        )))
+        .pipe(gulpif(!PRODUCTION, sourcemaps.write()))
+        .pipe(gulp.dest(PATHS.dist + '/assets/css'))
 }
 
 //================ JS
@@ -143,9 +140,9 @@ function sass() {
 function javascript() {
   return gulp.src(PATHS.javascript)
     .pipe(plumber({
-      errorHandler: notify.onError(err => ({
-        title: 'JS ERROR!', message: err.message
-      }))
+      errorHandler: () => {
+          beeper(1);
+      }
     }))
     .pipe(sourcemaps.init())
     .pipe(concat('app.js'))
@@ -156,11 +153,11 @@ function javascript() {
     .pipe(gulp.dest(PATHS.dist + '/assets/js'));
 }
 // 2) Version with just copy all js files from src/js to dist/js
-// function javascript() {
-//     return gulp.src( PATHS.javascript )
-//         .pipe(newer(PATHS.dist + '/assets/js'))//filter existent files
-//         .pipe(gulp.dest(PATHS.dist + '/assets/js'));
-// }
+function javascriptCopy() {
+    return gulp.src( PATHS.javascriptCopy )
+        .pipe(newer(PATHS.dist + '/assets/js'))//filter existent files
+        .pipe(gulp.dest(PATHS.dist + '/assets/js'));
+}
 
 
 //================ IMAGES
@@ -196,8 +193,11 @@ function javascript() {
 
 // Start a server with BrowserSync to preview the site in
 function server(done) {
-  browser.init({ server: PATHS.dist, port: OPTIONS.port });
-  done();
+    browser.init(
+        {
+            server: PATHS.dist,
+            port: OPTIONS.port},
+        done);
 }
 // Reload the browser with BrowserSync
 function reload(done) {
@@ -220,10 +220,18 @@ function watch() {
 }
 
 //Public tasks
-const build = gulp.series(clean, gulp.parallel( gulp.series( gulp.parallel(sass, javascript), pages ), copy, copyToRoot));
+const build = gulp.series(
+    clean,
+    gulp.parallel(
+        gulp.series(
+            gulp.parallel(sass, javascript),
+            pages // uncache needs css and js files
+        ),
+        copy,
+        copyToRoot
+    )
+);
 exports.build = build;
 exports.default = gulp.series(build, server, watch);
-
-//test
 
 
