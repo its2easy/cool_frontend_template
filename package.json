@@ -28,7 +28,7 @@
     "gulp-uncache": "^0.4.0-beta1",
     "gulp.spritesmith": "^6.11.0",
     "panini": "^1.6.3",
-    "postcss": "^8.1.4",
+    "postcss": "^8.2.10",
     "yargs": "^16.1.0"
   },
   "repository": {
