@@ -43,8 +43,8 @@ const PATHS = {
         watch_styles: "src/assets/scss/**/*.scss",
         sprites: "src/assets/img/sprites/",
         javascript: [
-            "src/assets/js/vendor/jquery/jquery-3.5.1.js",
-            "src/assets/js/vendor/bootstrap4/bootstrap.bundle.js",
+            "src/assets/js/vendor/jquery/jquery-3.6.0.js",
+            "src/assets/js/vendor/bootstrap5/bootstrap.bundle.js",
             "src/assets/js/vendor/slick/slick.js",
             "src/assets/js/!(app).js",
             "src/assets/js/app.js",
@@ -137,6 +137,7 @@ function sass() {
 
 // Combine JavaScript into one file
 // 1) Version with concatenation and minification
+// todo uglify doesn't work with bs5 and mb es6 code, replace
 function javascript() {
   return gulp.src(PATHS.javascript)
     .pipe(plumber({
@@ -144,7 +145,7 @@ function javascript() {
           beeper(1);
       }
     }))
-    .pipe(sourcemaps.init())
+    .pipe(gulpif(!PRODUCTION, sourcemaps.init()))
     .pipe(concat('app.js'))
     .pipe(gulpif(PRODUCTION, uglify()
       .on('error', e => { console.log(e); })
@@ -215,7 +216,7 @@ function watch() {
   gulp.watch('src/pages/**/*.html').on('all', gulp.series(pages, reload));//html pages
   gulp.watch('src/{layouts,partials}/**/*.html').on('all', gulp.series(resetPages, pages, reload));//html layouts
   gulp.watch(PATHS.watch_styles).on('all', gulp.series(sass, reload));//scss
-  gulp.watch('src/assets/js/**/*.js').on('all', gulp.series(javascript, reload));//js
+  gulp.watch('src/assets/js/**/*.js').on('all', gulp.series(javascriptCopy, reload));//js
   //gulp.watch(PATHS.sprites + '**/*').on('all', gulp.series(sprites, reload));//sprites
 }
 
@@ -224,7 +225,7 @@ const build = gulp.series(
     clean,
     gulp.parallel(
         gulp.series(
-            gulp.parallel(sass, javascript),
+            gulp.parallel(sass, javascriptCopy),
             pages // uncache needs css and js files
         ),
         copy,

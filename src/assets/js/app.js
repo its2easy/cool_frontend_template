@@ -23,7 +23,7 @@ $('.js-form-order').on('submit',function(e) {
 
  	//dataToSend += '&source=' + encodeURIComponent(form.data('source')); //extend dataToSend
 
-    // Form reaction on sending 
+    // Form reaction on sending
     button.attr('disabled',true);
     button.text('Отправка...');
     form.find('input').attr('disabled',true);
