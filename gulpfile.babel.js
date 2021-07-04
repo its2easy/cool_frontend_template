@@ -1,23 +1,43 @@
 'use strict';
 
-const yargs = require('yargs'),
-     browser = require('browser-sync'),
-     gulp = require('gulp'),
-     gulpif = require('gulp-if'),
-     newer = require('gulp-newer'),
-     uncache = require('gulp-uncache'),
-     plumber = require('gulp-plumber'),
-     sourcemaps = require('gulp-sourcemaps'),
-     gulpSass = require('gulp-sass'),
-     concat = require('gulp-concat'),
-     uglify = require('gulp-uglify'),
-     panini = require('panini'),
-     spritesmith = require('gulp.spritesmith'),
-     del = require('del'),
-     postcss    = require('gulp-postcss'),
-     autoprefixer = require('autoprefixer'),
-     cssnano = require('cssnano'),
-     beeper = require('beeper');
+//const yargs = require('yargs');
+//      browser = require('browser-sync'),
+//      gulp = require('gulp'),
+//      gulpif = require('gulp-if'),
+//      newer = require('gulp-newer'),
+//      uncache = require('gulp-uncache'),
+//      plumber = require('gulp-plumber'),
+//      sourcemaps = require('gulp-sourcemaps'),
+//      gulpSass = require('gulp-sass'),
+//      concat = require('gulp-concat'),
+//      uglify = require('gulp-uglify'),
+//      panini = require('panini'),
+//      spritesmith = require('gulp.spritesmith'),
+//      del = require('del'),
+//      postcss    = require('gulp-postcss'),
+//      autoprefixer = require('autoprefixer'),
+//      cssnano = require('cssnano'),
+//      beeper = require('beeper');
+import yargs from 'yargs';
+import browser  from  'browser-sync' ;
+import gulp  from 'gulp';
+import gulpif  from  'gulp-if' ;
+import newer from  'gulp-newer' ;
+import uncache  from  'gulp-uncache' ;
+import plumber from 'gulp-plumber'  ;
+import sourcemaps from 'gulp-sourcemaps'  ;
+import dartSass from 'sass';
+import gulpSass from 'gulp-sass';
+const sassPlugin = gulpSass( dartSass );
+import concat  from  'gulp-concat' ;
+import uglify  from  'gulp-uglify' ;
+import panini  from 'panini'  ;
+import spritesmith  from 'gulp.spritesmith'  ;
+import del  from 'del'  ;
+import postcss from  'gulp-postcss' ;
+import autoprefixer  from 'autoprefixer'  ;
+import cssnano  from 'cssnano'  ;
+import beeper from 'beeper'; // v3 doesn't work without type: module
 
 //gulp-newer - filter existing files based mtime
 //gulp-uncache - disable browser cashing on changed files
@@ -58,6 +78,7 @@ const PATHS = {
 
 // Check for --production flag
 const PRODUCTION = !!(yargs.argv.production);
+//const PRODUCTION = false;
 
 // Delete the "dist" folder
 // This happens every time a build starts
@@ -119,7 +140,7 @@ function resetPages(done) {
 function sass() {
     return gulp.src(PATHS.scss_main_file)
         .pipe(gulpif(!PRODUCTION, sourcemaps.init()))
-        .pipe(gulpSass({}).on('error', gulpSass.logError))
+        .pipe(sassPlugin.sync({}).on('error', sassPlugin.logError))
         .on('error', (err) => {
             beeper(1);
         })
@@ -232,7 +253,10 @@ const build = gulp.series(
         copyToRoot
     )
 );
-exports.build = build;
-exports.default = gulp.series(build, server, watch);
 
+
+// exports.build = build;
+// exports.default = gulp.series(build, server, watch);
+export default  gulp.series(build, server, watch);
+export { build };
 

@@ -1,6 +1,6 @@
 {
   "name": "cool_frontend_template",
-  "version": "1.4.1",
+  "version": "1.5.0",
   "description": "Template to build frontend.",
   "main": "gulpfile.js",
   "scripts": {
@@ -10,10 +10,13 @@
   "author": "Dmitriy Kovalev",
   "license": "MIT",
   "devDependencies": {
-    "autoprefixer": "^10.0.1",
-    "beeper": "^2.0.0",
-    "browser-sync": "^2.26.7",
-    "cssnano": "^4.1.10",
+    "@babel/core": "^7.14.6",
+    "@babel/preset-env": "^7.14.7",
+    "@babel/register": "^7.14.5",
+    "autoprefixer": "^10.2.6",
+    "beeper": "^2.1.0",
+    "browser-sync": "^2.27.4",
+    "cssnano": "^5.0.6",
     "del": "^6.0.0",
     "gulp": "^4.0.2",
     "gulp-cli": "^2.3.0",
@@ -22,14 +25,15 @@
     "gulp-newer": "^1.4.0",
     "gulp-plumber": "^1.2.1",
     "gulp-postcss": "^9.0.0",
-    "gulp-sass": "^4.1.0",
-    "gulp-sourcemaps": "^2.6.5",
+    "gulp-sass": "^5.0.0",
+    "gulp-sourcemaps": "^3.0.0",
     "gulp-uglify": "^3.0.2",
     "gulp-uncache": "^0.4.0-beta1",
-    "gulp.spritesmith": "^6.11.0",
-    "panini": "^1.6.3",
-    "postcss": "^8.1.4",
-    "yargs": "^16.1.0"
+    "gulp.spritesmith": "^6.12.1",
+    "panini": "^1.7.1",
+    "postcss": "^8.3.5",
+    "sass": "^1.35.1",
+    "yargs": "^17.0.1"
   },
   "repository": {
     "type": "git",
