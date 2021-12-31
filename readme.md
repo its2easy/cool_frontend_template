@@ -1,12 +1,11 @@
-# Cool frontend template
+# Frontend template
+for projects without the webpack.
 
-Template to compile frontend  
 Gulp config provides these features:
 
 - CSS: SCSS, Autoprefixer, CSSNano, Sourcemap
-- JS: Uglify, Concat, Sourcemap
+- JS: Terser, Concat, Sourcemap
 - Pages: Panini (Handlebars syntax)
-- Sprites: gulp.spritesmith (disabled by default)
 - Server: live-reload via browser-sync
  
 Pure css  files can be placed in **src/css/** to avoid compilation
@@ -14,10 +13,6 @@ Pure css  files can be placed in **src/css/** to avoid compilation
 List of javascript files to compile placed in PATHS.javascript, to disable js compilation 
 uncomment version 2 javascript function, and second "javascript" in PATHS
 
-
-Png images to make a sprite should be in *src/assets/img/sprites/*  
-Image like *circle.png* can be used as: `@include sprite( $icon-circle );` 
- 
 All of scss imports are in **app.scss**, all vendor imports are in *src/assets/scss/vendor.scss*  
 
 
