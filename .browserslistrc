@@ -1,9 +1,12 @@
->= 0.5%
-last 2 major version
+>= 1%
 not dead
-Chrome >= 60
-Firefox >= 60
-iOS >= 12
-Safari >= 12
-not Explorer <= 11
-not ExplorerMobile <= 11
+last 2 major version
+iOS >= 13
+Safari >= 13
+not ie >= 10
+not ie_mob >= 10
+not op_mob > 1
+not kaios > 1
+not baidu > 1
+not bb > 1
+not op_mini all

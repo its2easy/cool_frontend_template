@@ -1,43 +1,27 @@
 'use strict';
-
-//const yargs = require('yargs');
-//      browser = require('browser-sync'),
-//      gulp = require('gulp'),
-//      gulpif = require('gulp-if'),
-//      newer = require('gulp-newer'),
-//      uncache = require('gulp-uncache'),
-//      plumber = require('gulp-plumber'),
-//      sourcemaps = require('gulp-sourcemaps'),
-//      gulpSass = require('gulp-sass'),
-//      concat = require('gulp-concat'),
-//      uglify = require('gulp-uglify'),
-//      panini = require('panini'),
-//      spritesmith = require('gulp.spritesmith'),
-//      del = require('del'),
-//      postcss    = require('gulp-postcss'),
-//      autoprefixer = require('autoprefixer'),
-//      cssnano = require('cssnano'),
-//      beeper = require('beeper');
 import yargs from 'yargs';
-import browser  from  'browser-sync' ;
+import browser  from  'browser-sync';
 import gulp  from 'gulp';
-import gulpif  from  'gulp-if' ;
-import newer from  'gulp-newer' ;
-import uncache  from  'gulp-uncache' ;
-import plumber from 'gulp-plumber'  ;
-import sourcemaps from 'gulp-sourcemaps'  ;
+import gulpif  from  'gulp-if';
+import newer from  'gulp-newer';
+import uncache  from  'gulp-uncache';
+import plumber from 'gulp-plumber';
+import sourcemaps from 'gulp-sourcemaps' ;
 import dartSass from 'sass';
 import gulpSass from 'gulp-sass';
-const sassPlugin = gulpSass( dartSass );
-import concat  from  'gulp-concat' ;
-import uglify  from  'gulp-uglify' ;
-import panini  from 'panini'  ;
-import spritesmith  from 'gulp.spritesmith'  ;
-import del  from 'del'  ;
-import postcss from  'gulp-postcss' ;
-import autoprefixer  from 'autoprefixer'  ;
-import cssnano  from 'cssnano'  ;
+import concat  from  'gulp-concat';
+import terser from 'gulp-terser';
+import panini  from 'panini';
+import del  from 'del';
+import postcss from  'gulp-postcss';
+import autoprefixer  from 'autoprefixer';
+import cssnano  from 'cssnano';
 import beeper from 'beeper'; // v3 doesn't work without type: module
+
+const sassPlugin = gulpSass( dartSass );
+const argv = yargs(process.argv.slice(2)).argv;
+const PRODUCTION = !!(argv.production);
+
 
 //gulp-newer - filter existing files based mtime
 //gulp-uncache - disable browser cashing on changed files
@@ -55,17 +39,14 @@ const PATHS = {
             "src/assets/**/*",
             "!src/assets/{js,scss}",
             "!src/assets/{js,scss}/**/*",
-            "!src/assets/img/sprites/**/*",
-            "!src/assets/img/sprites"
         ],
         scss_main_file: 'src/assets/scss/app.scss',
         to_root: "src/to-root/**/*",
         watch_styles: "src/assets/scss/**/*.scss",
-        sprites: "src/assets/img/sprites/",
         javascript: [
-            "src/assets/js/vendor/jquery/jquery-3.6.0.js",
-            "src/assets/js/vendor/bootstrap5/bootstrap.bundle.js",
-            "src/assets/js/vendor/slick/slick.js",
+            // "src/assets/js/vendor/jquery/jquery-3.6.0.js",
+            // "src/assets/js/vendor/bootstrap5/bootstrap.bundle.js",
+            // "src/assets/js/vendor/slick/slick.js",
             "src/assets/js/!(app).js",
             "src/assets/js/app.js",
         ],
@@ -76,9 +57,6 @@ const PATHS = {
         port: 8000
     };
 
-// Check for --production flag
-const PRODUCTION = !!(yargs.argv.production);
-//const PRODUCTION = false;
 
 // Delete the "dist" folder
 // This happens every time a build starts
@@ -99,7 +77,6 @@ function copy() {
     .pipe(newer(PATHS.dist))//filter existent files
     .pipe(gulp.dest(PATHS.dist + '/assets'));
 }
-
 
 // |copies from folder "to-root" to the root of "dist"
 function copyToRoot() {
@@ -158,7 +135,6 @@ function sass() {
 
 // Combine JavaScript into one file
 // 1) Version with concatenation and minification
-// todo uglify doesn't work with bs5 and mb es6 code, replace
 function javascript() {
   return gulp.src(PATHS.javascript)
     .pipe(plumber({
@@ -168,7 +144,7 @@ function javascript() {
     }))
     .pipe(gulpif(!PRODUCTION, sourcemaps.init()))
     .pipe(concat('app.js'))
-    .pipe(gulpif(PRODUCTION, uglify()
+    .pipe(gulpif(PRODUCTION, terser()
       .on('error', e => { console.log(e); })
     ))
     .pipe(gulpif(!PRODUCTION, sourcemaps.write()))
@@ -180,36 +156,6 @@ function javascriptCopy() {
         .pipe(newer(PATHS.dist + '/assets/js'))//filter existent files
         .pipe(gulp.dest(PATHS.dist + '/assets/js'));
 }
-
-
-//================ IMAGES
-
-//Sprites
-//|options with PATHS may not work
-//disabled by default, uncomment here and in "watch", and add to build task to enable
-// function sprites() {
-//     var spriteData =
-//         gulp.src(PATHS.sprites + '*.png') //Sources of images to merge in sprite
-//             .pipe(plumber({
-//               errorHandler: notify.onError(err => ({
-//                 title: 'SPRITES ERROR!',
-//                 message: err.message
-//               }))
-//             }))
-//             .pipe(spritesmith({
-//                 imgName: 'sprite.png', //Name of sprite image
-//                 cssName: '_sprites.scss', //file with styles of sprite
-//                 imgPath: '../img/sprites/sprite.png?' + Date.now(), //path to place compiled sprite
-//                 cssFormat: 'scss', //Format of file with sprite styles
-//                 padding: 1,//space between images inside, restart 2 times after changing
-//                 cssVarMap: function(sprite) {
-//                     sprite.name = 'icon-' + sprite.name //Generate sprite name 'icon-' + name of the file
-//                 }
-//             }));
-//     spriteData.img.pipe(gulp.dest('dist/assets/img/sprites/')); // Destination path to the sprite image
-//     spriteData.css.pipe(gulp.dest('src/assets/scss/components')); // Destination to the scss file with sprite styles
-//     return spriteData;
-// }
 
 //================ SERVER
 
@@ -230,7 +176,7 @@ function reload(done) {
 //================
 
 // Watch for changes to static assets, pages, Sass, and JavaScript
-// |reload server when changing: static, html, scss, js, images, sprites, fonts
+// |reload server when changing: static, html, scss, js, images, fonts
 function watch() {
   gulp.watch(PATHS.assets, gulp.series(copy, reload) );//fonts, pure css from assets folder
   gulp.watch(PATHS.to_root, gulp.series(copyToRoot, reload) );//simple files for root
@@ -238,7 +184,6 @@ function watch() {
   gulp.watch('src/{layouts,partials}/**/*.html').on('all', gulp.series(resetPages, pages, reload));//html layouts
   gulp.watch(PATHS.watch_styles).on('all', gulp.series(sass, reload));//scss
   gulp.watch('src/assets/js/**/*.js').on('all', gulp.series(javascriptCopy, reload));//js
-  //gulp.watch(PATHS.sprites + '**/*').on('all', gulp.series(sprites, reload));//sprites
 }
 
 //Public tasks
@@ -254,9 +199,6 @@ const build = gulp.series(
     )
 );
 
-
-// exports.build = build;
-// exports.default = gulp.series(build, server, watch);
 export default  gulp.series(build, server, watch);
 export { build };
 
