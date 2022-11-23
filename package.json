@@ -13,7 +13,7 @@
   "devDependencies": {
     "autoprefixer": "^10.4.1",
     "beeper": "^2.1.0",
-    "browser-sync": "^2.27.7",
+    "browser-sync": "^2.27.10",
     "cssnano": "^5.0.14",
     "del": "^6.0.0",
     "gulp": "^4.0.2",
